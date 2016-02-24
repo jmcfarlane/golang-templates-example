@@ -3,9 +3,9 @@ package main
 //go:generate go-bindata-assetfs www/... templates/...
 
 import (
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
 
 	"github.com/julienschmidt/httprouter"
 )
