@@ -1,8 +1,8 @@
 package main
 
 import (
+	"html/template"
 	"strings"
-	"text/template"
 )
 
 var (
