@@ -15,7 +15,7 @@ Here's what I was trying to accomplish:
 1. Use some templates as partials (`header.hmtl`, `footer.html`).
 1. Serve static content in a manner similar to
    [http.FileServer](https://golang.org/pkg/net/http/#example_FileServer).
-1. ~~Exclude templates from the static files being served.~~
+1. Exclude templates from the static files being served.
 1. Support custom template functions.
 1. Compile everything into a single static binary (including templates
    and static files).
@@ -36,7 +36,7 @@ cd $GOPATH/src/github.com/jmcfarlane/golang-templates-example
 go generate
 go build && ./golang-templates-example
 curl http://localhost:8080/hello/jack
-xdg-open http://localhost:8080/golang.png
+xdg-open http://localhost:8080/static/golang.png
 ```
 
 **NOTE:**

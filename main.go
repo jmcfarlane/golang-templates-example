@@ -1,6 +1,6 @@
 package main
 
-//go:generate go-bindata-assetfs www/... templates/...
+//go:generate go-bindata-assetfs static/... templates/...
 
 import (
 	"html/template"
@@ -52,8 +52,8 @@ func main() {
 	// Example route that takes one rest style option
 	router.GET("/hello/:name", hello)
 
-	// Serve static assets via the "www" directory
-	router.NotFound = http.FileServer(assetFS())
+	// Serve static assets via the "static" directory
+	router.ServeFiles("/static/*filepath", assetFS())
 
 	// Serve this program forever
 	log.Fatal(http.ListenAndServe(":8080", router))
