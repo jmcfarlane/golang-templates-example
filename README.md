@@ -11,8 +11,8 @@ Here's what I was trying to accomplish:
 
 1. Have a directory of templates (`header.html`, `foobar.html`, etc).
 1. Have a directory of static files (css, images, etc).
-1. Use some templates as full pages (`about.hmtl`, `hello.html`).
-1. Use some templates as partials (`header.hmtl`, `footer.html`).
+1. Use some templates as full pages (`about.html`, `hello.html`).
+1. Use some templates as partials (`header.html`, `footer.html`).
 1. Serve static content in a manner similar to
    [http.FileServer](https://golang.org/pkg/net/http/#example_FileServer).
 1. Exclude templates from the static files being served.
