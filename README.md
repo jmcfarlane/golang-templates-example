@@ -23,9 +23,7 @@ Here's what I was trying to accomplish:
 ## Installation
 
 ```
-go get github.com/jteeuwen/go-bindata/...
-go get github.com/elazarl/go-bindata-assetfs/...
-go get github.com/julienschmidt/httprouter
+go get github.com/GeertJohan/go.rice/rice
 go get -d github.com/jmcfarlane/golang-templates-example
 ```
 
@@ -35,17 +33,5 @@ go get -d github.com/jmcfarlane/golang-templates-example
 cd $GOPATH/src/github.com/jmcfarlane/golang-templates-example
 go generate
 go build && ./golang-templates-example
-curl http://localhost:8080/hello/jack
-xdg-open http://localhost:8080/static/golang.png
+curl http://localhost:8080
 ```
-
-**NOTE:**
-
-To my knowledge there is no way to run `go generate` automatically, so
-by not having the resulting `bindata_assetfs.go` file in source
-code... the resulting project is not "*go gettable*".
-
-## Notes
-
-I have not yet sorted out how to exclude the templates from being
-served over http (hence the strike through).
