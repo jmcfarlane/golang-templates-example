@@ -1,5 +1,9 @@
 # A simple Golang templates example
 
+[![Go Report Card](https://goreportcard.com/badge/jmcfarlane/golang-templates-example)](https://goreportcard.com/report/jmcfarlane/golang-templates-example)
+[![Build Status](https://img.shields.io/travis/jmcfarlane/golang-templates-example/master.svg)](https://github.com/jmcfarlane/golang-templates-example/tree/master)
+
+
 During the process of learning Golang templates, certain aspects were
 confusing to me. The goal of this little repo is to document what I
 eventually wound up doing. Hopefully with feedback this repo could
