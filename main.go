@@ -3,6 +3,8 @@ package main
 //go:generate rice embed-go
 
 import (
+	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -37,9 +39,11 @@ func newTemplate(path string, _ os.FileInfo, _ error) error {
 	}
 	templateString, err := templateBox.String(path)
 	if err != nil {
+		log.Panicf("Unable to extract: path=%s, err=%s", path, err)
+	}
+	if _, err = templates.New(filepath.Join("templates", path)).Parse(templateString); err != nil {
 		log.Panicf("Unable to parse: path=%s, err=%s", path, err)
 	}
-	templates.New(filepath.Join("templates", path)).Parse(templateString)
 	return nil
 }
 
@@ -49,6 +53,10 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p interface{}) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func broken(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	renderTemplate(w, "templates/missing.html", nil)
 }
 
 // Well hello there
@@ -75,6 +83,9 @@ func getRouter() *httprouter.Router {
 	// Example route that takes one rest style option
 	router.GET("/hello/:name", hello)
 
+	// Example route that encounters an error
+	router.GET("/broken/handler", broken)
+
 	// Serve static assets via the "static" directory
 	fs := rice.MustFindBox("static").HTTPBox()
 	router.ServeFiles("/static/*filepath", fs)
@@ -82,6 +93,8 @@ func getRouter() *httprouter.Router {
 }
 
 func main() {
-	// Serve this program forever
-	log.Fatal(http.ListenAndServe(":8080", getRouter()))
+	listen := flag.String("-listen", ":8080", "Interface and port to listen on")
+	flag.Parse()
+	fmt.Println("Listening on", *listen)
+	log.Fatal(http.ListenAndServe(*listen, getRouter()))
 }
