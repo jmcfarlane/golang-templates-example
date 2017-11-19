@@ -35,7 +35,10 @@ go get -d github.com/jmcfarlane/golang-templates-example
 
 ```
 cd $GOPATH/src/github.com/jmcfarlane/golang-templates-example
+go get -t ./...
 go generate
-go build && ./golang-templates-example
+go test -v
+go build
+./golang-templates-example
 curl http://localhost:8080
 ```
