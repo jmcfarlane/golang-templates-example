@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/julienschmidt/httprouter"
@@ -20,8 +21,15 @@ type Model struct {
 }
 
 // Templates with functions available to them
-var templates = template.New("").Funcs(templateMap)
-var templateBox *rice.Box
+var (
+	templateMap = template.FuncMap{
+		"Upper": func(s string) string {
+			return strings.ToUpper(s)
+		},
+	}
+	templates   = template.New("").Funcs(templateMap)
+	templateBox *rice.Box
+)
 
 func newTemplate(path string, _ os.FileInfo, _ error) error {
 	if path == "" {
@@ -53,8 +61,7 @@ func index(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	renderTemplate(w, "templates/index.html", nil)
 }
 
-// The server itself
-func main() {
+func getRouter() *httprouter.Router {
 	// Load and parse templates (from binary or disk)
 	templateBox = rice.MustFindBox("templates")
 	templateBox.Walk("", newTemplate)
@@ -71,7 +78,10 @@ func main() {
 	// Serve static assets via the "static" directory
 	fs := rice.MustFindBox("static").HTTPBox()
 	router.ServeFiles("/static/*filepath", fs)
+	return router
+}
 
+func main() {
 	// Serve this program forever
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", getRouter()))
 }
