@@ -10,13 +10,9 @@ go:
 install:
   - "go version"
   - "go env"
-  - "go get github.com/GeertJohan/go.rice/rice"
-  - "go get -t -v ./..."
 
 script:
-  - "go generate"
-  - "go test -race -coverprofile=coverage.txt -covermode=atomic -v"
-  - "go build"
+  - "make"
 
 after_success:
   - "bash <(curl -s https://codecov.io/bash)"

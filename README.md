@@ -42,3 +42,12 @@ go build
 ./golang-templates-example
 curl http://localhost:8080
 ```
+
+## Optionally use make
+
+If you have `make` installed, you can try this repo by doing:
+
+```
+make
+./golang-templates-example
+```
