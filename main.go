@@ -32,7 +32,7 @@ var (
 	templates   = template.New("").Funcs(templateMap)
 	templateBox *rice.Box
 )
-
+/*
 func newTemplate(path string, _ os.FileInfo, _ error) error {
 	if path == "" {
 		return nil
@@ -43,6 +43,46 @@ func newTemplate(path string, _ os.FileInfo, _ error) error {
 	}
 	if _, err = templates.New(filepath.Join("templates", path)).Parse(templateString); err != nil {
 		log.Panicf("Unable to parse: path=%s, err=%s", path, err)
+	}
+	return nil
+}
+*/
+
+func newTemplate(path string, fileInfo os.FileInfo, _ error) error {
+	if path == "" {
+		return nil
+	}
+	/*
+	 * takeRelativeTo function will take the absolute path 'path' which is by default passed to 
+	 * our 'newTemplate' by Walk function, and will eliminate the intial part of the path up to the end of the
+	 * specified directory 'afterDir' ('templates' in this case). Then it will return the rest starting from 
+	 * the very end of afterDir. If the specified afterDir has more than 1 occurances in the path, 
+	 * only the first occurance will be considered and the other occurances will be ignored.     
+	 * eg, If path = "/home/Projects/go/website/templates/html/index.html", then
+	 * relativPath := takeRelativeTo(path, "templates") returns "/html/index.html" ; 
+	 * If path = "/home/Projects/go/website/templates/testing.html", then ;
+	 * relativPath := takeRelativeTo(path, "templates") returns "/testing.html" ;
+	 * If path = "/home/Projects/go/website/templates/html/templates/components/footer.html", then
+	 * relativPath := takeRelativeTo(path, "templates") returns "/html/templates/components/footer.html" .
+	 */
+	takeRelativeTo := func(givenpath string, afterDir string) string {
+	    if strings.Contains(givenpath, afterDir+"/") { 
+	        wantedpart := strings.SplitAfter(givenpath, afterDir)[1:]
+	        return filepath.Join(wantedpart...)
+	    }
+	    return givenpath
+	}
+	//if path is a directory, skip Parsing template. Trying to Parse a template from a directory caused an error, now fixed.
+	if !fileInfo.IsDir() {
+	//get relative path starting from the end of 'templates' .
+	relativPath := takeRelativeTo(path, "templates")
+	templateString, err := templateBox.String(relativPath)
+	if err != nil {
+		log.Panicf("Unable to extract: path=%s, err=%s", relativPath, err)
+	}
+	if _, err = templates.New(filepath.Join("templates", relativPath)).Parse(templateString); err != nil {
+		log.Panicf("Unable to parse: path=%s, err=%s", relativPath, err)
+	}
 	}
 	return nil
 }
