@@ -66,7 +66,7 @@ func newTemplate(path string, fileInfo os.FileInfo, _ error) error {
 	 * relativPath := takeRelativeTo(path, "templates") returns "/html/templates/components/footer.html" .
 	 */
 	takeRelativeTo := func(givenpath string, afterDir string) string {
-	    if strings.Contains(givenpath, afterDir+"/") { 
+	    if strings.Contains(givenpath, afterDir+string(filepath.Separator)) { 
 	        wantedpart := strings.SplitAfter(givenpath, afterDir)[1:]
 	        return filepath.Join(wantedpart...)
 	    }
